@@ -368,6 +368,7 @@ struct AmenityButton: View {
         }
     }
 }
+}
 
 // MARK: - Preview
 

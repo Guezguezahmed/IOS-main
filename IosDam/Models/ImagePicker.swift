@@ -5,13 +5,11 @@ import SwiftUI
 
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
-    // Utilise la méthode moderne pour fermer la vue
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.presentationMode) var presentationMode
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
-        // Assurez-vous que le délégué est défini pour recevoir la photo sélectionnée
         picker.delegate = context.coordinator
         return picker
     }
@@ -26,17 +24,15 @@ struct ImagePicker: UIViewControllerRepresentable {
         let parent: ImagePicker
         init(_ parent: ImagePicker) { self.parent = parent }
 
-        // Lorsque l'utilisateur sélectionne une image
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let uiImage = info[.originalImage] as? UIImage {
-                parent.image = uiImage // Stocke l'image dans le Binding
+                parent.image = uiImage
             }
-            parent.dismiss() // Ferme le sélecteur
+            parent.presentationMode.wrappedValue.dismiss()
         }
 
-        // Lorsque l'utilisateur annule
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            parent.dismiss() // Ferme le sélecteur
+            parent.presentationMode.wrappedValue.dismiss()
         }
     }
 }
